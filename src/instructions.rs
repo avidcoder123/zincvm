@@ -1,4 +1,7 @@
-pub enum Instruction {
+pub enum Instruction<'a> {
     //item.push [...bytes] -> StackItem
-    ItemPush(Vec<u8>)
+    ItemPush(&'a[u8]),
+
+    //out.printRaw -> IO
+    OutPrintRaw()
 }

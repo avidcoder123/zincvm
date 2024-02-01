@@ -3,15 +3,28 @@ use crate::instructions::{Instruction, Instruction::*};
 
 
 pub fn run(instructions: Vec<Instruction>) {
-    let stack = Stack::new();
+    let mut stack = Stack::new();
 
     for i in 0..instructions.len() {
-        match &instructions[i] {
+        let result = match &instructions[i] {
             ItemPush(bytes) => {
-                println!("Push");
+                stack.push(*bytes)
             },
 
-            _ => ()
+            OutPrintRaw() => {
+                let item = stack.pop();
+                match item {
+                    Err(message) => Err(message),
+                    Ok(slice) => {
+                        println!("{:?}", slice);
+                        Ok(())
+                    }
+                }
+            }
+        };
+
+        if let Err(message) = result {
+            println!("{}", message);
         }
     }
 }
