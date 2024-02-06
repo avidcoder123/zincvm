@@ -11,5 +11,5 @@ pub enum Instruction<'a> {
     NumberPush(Number),
 
     //number.print [data type] -> IO
-    NumberPrint
+    NumberPrint(Number)
 }

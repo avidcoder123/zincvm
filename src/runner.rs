@@ -24,23 +24,45 @@ pub fn run(instructions: Vec<Instruction>) {
             },
 
             NumberPush(number) => {
-                match *number {
-                    Byte(n) => stack.push(&n.to_be_bytes()),
-                    UByte(n) => stack.push(&n.to_be_bytes()),
-                    Int(n) => stack.push(&n.to_be_bytes()),
-                    UInt(n) => stack.push(&n.to_be_bytes()),
-                    Long(n) => stack.push(&n.to_be_bytes()),
-                    ULong(n) => stack.push(&n.to_be_bytes()),
-                    LongLong(n) => stack.push(&n.to_be_bytes()),
-                    ULongLong(n) => stack.push(&n.to_be_bytes()),
-                    LongLongLong(n) => stack.push(&n.to_be_bytes()),
-                    ULongLongLong(n) => stack.push(&n.to_be_bytes()),
-                    Float(n) => stack.push(&n.to_be_bytes()),
-                    Double(n) => stack.push(&n.to_be_bytes()),
-                }
+                stack.push(match *number {
+                    Byte(n) => &n.to_be_bytes(),
+                    UByte(n) => &n.to_be_bytes(),
+                    Int(n) => &n.to_be_bytes(),
+                    UInt(n) => &n.to_be_bytes(),
+                    Long(n) => &n.to_be_bytes(),
+                    ULong(n) => &n.to_be_bytes(),
+                    LongLong(n) => &n.to_be_bytes(),
+                    ULongLong(n) => &n.to_be_bytes(),
+                    LongLongLong(n) => &n.to_be_bytes(),
+                    ULongLongLong(n) => &n.to_be_bytes(),
+                    Float(n) => &n.to_be_bytes(),
+                    Double(n) => &n.to_be_bytes(),
+                })
             },
 
-            NumberPrint
+            NumberPrint() => {
+                let item = stack.pop();
+                match item {
+                    Err(message) => Err(message),
+                    Ok(number) => {
+                        match *number {
+                            Byte(n) => println!("{}", i8::from_be_bytes([number[0]])),
+                            UByte(n) => u8::from_be_bytes([number[0]]),
+                            Int(n) => &n.to_be_bytes(),
+                            UInt(n) => &n.to_be_bytes(),
+                            Long(n) => &n.to_be_bytes(),
+                            ULong(n) => &n.to_be_bytes(),
+                            LongLong(n) => &n.to_be_bytes(),
+                            ULongLong(n) => &n.to_be_bytes(),
+                            LongLongLong(n) => &n.to_be_bytes(),
+                            ULongLongLong(n) => &n.to_be_bytes(),
+                            Float(n) => &n.to_be_bytes(),
+                            Double(n) => &n.to_be_bytes(),
+                        };
+                        Ok(())
+                    }
+                }
+            }
         };
 
         if let Err(message) = result {
