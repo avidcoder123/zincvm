@@ -4,7 +4,7 @@ use crate::number::Number::{self, *};
 
 
 pub fn run(instructions: Vec<Instruction>) {
-    let mut stack = Stack::new();
+    let mut stack: Stack = Stack::new();
 
     for i in 0..instructions.len() {
         let result = match &instructions[i] {
@@ -24,24 +24,23 @@ pub fn run(instructions: Vec<Instruction>) {
             },
 
             NumberPush(number) => {
-                let to_push: &[u8] = match *number {
-                    Byte(n) => &n.to_be_bytes(),
-                    UByte(n) => &n.to_be_bytes(),
-                    Int(n) => &n.to_be_bytes(),
-                    UInt(n) => &n.to_be_bytes(),
-                    Long(n) => &n.to_be_bytes(),
-                    ULong(n) => &n.to_be_bytes(),
-                    LongLong(n) => &n.to_be_bytes(),
-                    ULongLong(n) => &n.to_be_bytes(),
-                    LongLongLong(n) => &n.to_be_bytes(),
-                    ULongLongLong(n) => &n.to_be_bytes(),
-                    Float(n) => &n.to_be_bytes(),
-                    Double(n) => &n.to_be_bytes(),
+                let result = match *number {
+                    Byte(n) => stack.push(&n.to_be_bytes()),
+                    UByte(n) => stack.push(&n.to_be_bytes()),
+                    Int(n) => stack.push(&n.to_be_bytes()),
+                    UInt(n) => stack.push(&n.to_be_bytes()),
+                    Long(n) => stack.push(&n.to_be_bytes()),
+                    ULong(n) => stack.push(&n.to_be_bytes()),
+                    LongLong(n) => stack.push(&n.to_be_bytes()),
+                    ULongLong(n) => stack.push(&n.to_be_bytes()),
+                    LongLongLong(n) => stack.push(&n.to_be_bytes()),
+                    ULongLongLong(n) => stack.push(&n.to_be_bytes()),
+                    Float(n) => stack.push(&n.to_be_bytes()),
+                    Double(n) => stack.push(&n.to_be_bytes()),
                 };
+                
 
-                stack.push(to_push);
-
-                Ok(())
+                result
             },
 
             NumberPrint(numType) => {
@@ -65,6 +64,19 @@ pub fn run(instructions: Vec<Instruction>) {
                         };
                         Ok(())
                     }
+                }
+            },
+
+            NumberAdd() => {
+                let item1 = stack.pop();
+                let item2 = stack.pop();
+
+                if let Err(msg) = item1 {
+                    return Err(msg);
+                } else if let item2 = Err(i) {
+                    return Err(i);
+                } else {
+                    Ok(())
                 }
             }
         };

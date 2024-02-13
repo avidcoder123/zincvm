@@ -8,12 +8,8 @@ mod number;
 
 fn main() {
     let instructions: Vec<Instruction> = vec![
-        Instruction::ItemPush(&[1]),
-        Instruction::ItemPush(&[2]),
-        Instruction::ItemPush(&[3]),
-        Instruction::OutPrintRaw(),
-        Instruction::OutPrintRaw(),
-        Instruction::OutPrintRaw()
+        Instruction::NumberPush(number::Number::Int(100)),
+        Instruction::NumberPrint(number::Number::Int(0))
     ];
     run(instructions);
 }
