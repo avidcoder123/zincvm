@@ -1,6 +1,13 @@
 use crate::stack::Stack;
 use crate::instructions::{Instruction, Instruction::*};
-use crate::number::Number::{self, *};
+
+fn coerceArraySize<Arr>(bytes: &[u8], len: usize) -> Result<Arr, &str> {
+    if bytes.len() != len {
+        Err("Cannot coerce item of size " + bytes.len() + "into size " + len)
+    } else {
+        Ok()
+    }
+}
 
 
 pub fn run(instructions: Vec<Instruction>) {
@@ -48,7 +55,15 @@ pub fn run(instructions: Vec<Instruction>) {
             I32Add() => {
                 let num1 = stack.pop();
                 let num2 = stack.pop();
-                
+                match num1 {
+                    Ok(n1) => match num2 {
+                        Ok(n2) => {
+                            let num1 = i32::from_be_bytes(&n1[0..4]);
+                        },
+                        Err(msg) => Err(msg)
+                    },
+                    Err(msg) => Err(msg)
+                }
             }
         };
 
