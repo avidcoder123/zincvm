@@ -23,61 +23,32 @@ pub fn run(instructions: Vec<Instruction>) {
                 }
             },
 
-            NumberPush(number) => {
-                let result = match *number {
-                    Byte(n) => stack.push(&n.to_be_bytes()),
-                    UByte(n) => stack.push(&n.to_be_bytes()),
-                    Int(n) => stack.push(&n.to_be_bytes()),
-                    UInt(n) => stack.push(&n.to_be_bytes()),
-                    Long(n) => stack.push(&n.to_be_bytes()),
-                    ULong(n) => stack.push(&n.to_be_bytes()),
-                    LongLong(n) => stack.push(&n.to_be_bytes()),
-                    ULongLong(n) => stack.push(&n.to_be_bytes()),
-                    LongLongLong(n) => stack.push(&n.to_be_bytes()),
-                    ULongLongLong(n) => stack.push(&n.to_be_bytes()),
-                    Float(n) => stack.push(&n.to_be_bytes()),
-                    Double(n) => stack.push(&n.to_be_bytes()),
-                };
-                
-
-                result
+            I32Push(num) => {
+                let item = num.to_be_bytes();
+                stack.push(&item);
+                Ok(())
             },
 
-            NumberPrint(numType) => {
-                let item = stack.pop();
-                match item {
-                    Err(message) => Err(message),
-                    Ok(number) => {
-                        match numType {
-                            Byte(n) => println!("{}", i8::from_be_bytes(number.try_into().unwrap())),
-                            UByte(n) => println!("{}", u8::from_be_bytes(number.try_into().unwrap())),
-                            Int(n) => println!("{}", i16::from_be_bytes(number.try_into().unwrap())),
-                            UInt(n) => println!("{}", u16::from_be_bytes(number.try_into().unwrap())),
-                            Long(n) => println!("{}", i32::from_be_bytes(number.try_into().unwrap())),
-                            ULong(n) => println!("{}", u32::from_be_bytes(number.try_into().unwrap())),
-                            LongLong(n) => println!("{}", i64::from_be_bytes(number.try_into().unwrap())),
-                            ULongLong(n) => println!("{}", u64::from_be_bytes(number.try_into().unwrap())),
-                            LongLongLong(n) => println!("{}", i128::from_be_bytes(number.try_into().unwrap())),
-                            ULongLongLong(n) => println!("{}", u128::from_be_bytes(number.try_into().unwrap())),
-                            Float(n) =>println!("{}", f32::from_be_bytes(number.try_into().unwrap())),
-                            Double(n) => println!("{}", f64::from_be_bytes(number.try_into().unwrap())),
-                        };
+            I32Print() => {
+                let num = stack.pop();
+                match num {
+                    Ok(bytes) => {
+                        let mut num: [u8; 4] = [0, 0, 0, 0];
+                        for i in 0..4 {
+                            num[i] = bytes[i];
+                        }
+                        let num = i32::from_be_bytes(num);
+                        println!("{}", num);
                         Ok(())
-                    }
+                    },
+                    Err(msg) => Err(msg)
                 }
             },
 
-            NumberAdd() => {
-                let item1 = stack.pop();
-                let item2 = stack.pop();
-
-                if let Err(msg) = item1 {
-                    return Err(msg);
-                } else if let item2 = Err(i) {
-                    return Err(i);
-                } else {
-                    Ok(())
-                }
+            I32Add() => {
+                let num1 = stack.pop();
+                let num2 = stack.pop();
+                
             }
         };
 

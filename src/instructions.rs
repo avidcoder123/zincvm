@@ -1,5 +1,3 @@
-use crate::number::Number;
-
 pub enum Instruction<'a> {
     //item.push [...bytes] -> StackItem
     ItemPush(&'a[u8]),
@@ -7,12 +5,12 @@ pub enum Instruction<'a> {
     //out.printRaw -> IO
     OutPrintRaw(),
 
-    //number.push [data type] [number] -> number
-    NumberPush(Number),
+    //i32.push [number] -> number
+    I32Push(i32),
 
-    //number.print [data type] -> IO
-    NumberPrint(Number),
+    //number.print -> IO
+    I32Print(),
 
     //number.add [data type] -> number
-    NumberAdd()
+    I32Add()
 }
